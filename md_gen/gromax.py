@@ -111,7 +111,7 @@ class Gromax(base):
             self, top_file, mdp_file, n_cpus=1, n_gpus=None,
             processing_obj=None, index_file=None, itp_files=None,
             submission_obj=None, max_warn=2, min_run=False, source_file=None,
-            env_exports=None, **kwargs):
+            env_exports=None, restrain=False, **kwargs):
         """initialize some gromax files and parameters"""
         self.top_file = os.path.abspath(top_file)
         self.mdp_file = os.path.abspath(mdp_file)
@@ -155,6 +155,7 @@ class Gromax(base):
             self.source_file = source_file
         else:
             self.source_file = os.path.abspath(source_file)
+        self.restrain = restrain
         self.kwargs = kwargs
 
     @property
@@ -220,6 +221,8 @@ class Gromax(base):
         # optionally add an index file
         if self.index_file is not None:
             grompp_cmd +=  ' -n ' + self.index_file
+        if self.restrain is True:
+            grompp_cmd += ' -r ' + self.start_name
         grompp_cmd += '\n'
         # generate mdrun command
         # JRP added '-cpi state -g md' on 07-01-2019
