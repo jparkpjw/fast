@@ -66,6 +66,10 @@ class AlignRMSDWrap(base_analysis):
         }
 
     @property
+    def analysis_folder(self):
+        return None
+
+    @property
     def base_output_name(self):
         return "rmsd_per_state"
     
