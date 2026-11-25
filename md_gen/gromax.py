@@ -79,8 +79,8 @@ class Gromax(base):
     ----------
     top_file : str,
         Gromacs topology filename.
-    mdp_file : str,
-        Gromacs mdp file that specifies simulation parameters.
+    prod_mdp_file : str,
+        Gromacs mdp file that specifies production simulation parameters.
     n_cpus : int, default = 1,
         The number of cpus to use with the simulation.
     n_gpus : int, default = None,
@@ -106,15 +106,17 @@ class Gromax(base):
         simulations.
     env_exports : str, default=None,
         A list of commands to submit before running a job.
+    restrain : bool, default=False,
+        Flag to specify if you are restraining atoms in the production run.
     """
     def __init__(
-            self, top_file, mdp_file, n_cpus=1, n_gpus=None,
+            self, top_file, prod_mdp_file, n_cpus=1, n_gpus=None,
             processing_obj=None, index_file=None, itp_files=None,
             submission_obj=None, max_warn=2, min_run=False, source_file=None,
             env_exports=None, restrain=False, **kwargs):
         """initialize some gromax files and parameters"""
         self.top_file = os.path.abspath(top_file)
-        self.mdp_file = os.path.abspath(mdp_file)
+        self.mdp_file = os.path.abspath(prod_mdp_file)
         self.n_cpus = n_cpus
         self.n_gpus = n_gpus
         if env_exports is None:
@@ -166,7 +168,7 @@ class Gromax(base):
     def config(self):
         return {
             'top_file': self.top_file,
-            'mdp_file': self.mdp_file,
+            'prod_mdp_file': self.prod_mdp_file,
             'n_cpus': self.n_cpus,
             'n_gpus': self.n_gpus,
             'processing_obj': self.processing_obj,
@@ -176,7 +178,7 @@ class Gromax(base):
             'max_warn': self.max_warn,
             'min_run': self.min_run,
             'source_file': self.source_file,
-            'env_exports' : self.env_exports
+            'env_exports' : self.env_exports,
         }
 
     def setup_run(self, struct, output_dir=None):
